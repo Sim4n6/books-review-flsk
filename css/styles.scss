@@ -1,5 +1,7 @@
+$frameColor: yellowgreen;
+$defaultmargin: 10px;
 img {
-    border: 2px solid green;
+    border: 2px solid $frameColor;
 }
 
 a {
@@ -9,28 +11,37 @@ a {
 }
 
 #menu {
-    margin: 10px;
+    margin: $defaultmargin;
     padding: 5px;
 }
 
 #body {
-    margin: 10px;
+    margin: $defaultmargin;
     padding: 5px;
+}
+
+#main-body {
+    background-color: beige;
+    padding: 2px;
+    border: 2px solid $frameColor;
+    margin: 2px;
 }
 
 th {
     background-color: lightgray;
     border: 2px solid black;
-    padding : 5px;
+    padding: 5px;
+    text-align: center;
 }
 
 td {
     border: 2px solid black;
-    padding : 5px;
+    padding: 5px;
 }
 
 table {
     border-collapse: collapse;
+    width: 100%;
 }
 
 .special-cell {
