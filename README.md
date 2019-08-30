@@ -2,7 +2,7 @@
 
 Web Programming with Python and JavaScript
 
-# Features of the website
+## Features of the website
 
  - contain 04 html files.
  - feed.html contain a unordered list.
