@@ -1,5 +1,6 @@
 $frameColor: yellowgreen;
 $defaultmargin: 10px;
+$defaultpadding: 5px;
 img {
     border: 2px solid $frameColor;
 }
@@ -10,14 +11,10 @@ a {
     text-align: center;
 }
 
-#menu {
-    margin: $defaultmargin;
-    padding: 5px;
-}
-
+#menu,
 #body {
     margin: $defaultmargin;
-    padding: 5px;
+    padding: $defaultpadding;
 }
 
 #main-body {
