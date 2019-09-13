@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session
+from flask import Flask, session, render_template, request, url_for
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -24,3 +24,13 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 def index():
     return "Project 1: TODO"
+
+
+@app.route("/search", methods=["POST", "GET"])
+def search():
+    data = dict()
+    if request.method == "POST":
+        data["isbn"] = request.form['isbn']
+        data["title"] = request.form['title']
+        data["author"] = request.form['author']
+    return render_template("search_form.html", data=data)

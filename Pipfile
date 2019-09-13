@@ -11,6 +11,7 @@ Flask = "*"
 Flask-Session = "*"
 SQLAlchemy = "*"
 gunicorn = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7.4"
