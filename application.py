@@ -33,20 +33,30 @@ def search():
         data["isbn"] = request.form['isbn']
         data["title"] = request.form['title']
         data["author"] = request.form['author']
-    return render_template("search_form.html", data=data)
+    return render_template("search.html", data=data)
 
 
-@app.route("/book", methods=["GET"])
-@app.route("/book/<int:bid>", methods=["GET"])
+@app.route("/book", methods=["GET", "POST"])
+@app.route("/book/<int:bid>", methods=["GET", "POST"])
 def book(bid=None):
-    if bid is None: 
+    if bid is None and request.method != "POST": 
         return render_template("error.html", message="Please, provide a book id.")
-        
+
+    if request.method == "POST":
+        review = request.form["review"]
+        review_of_book = db.execute("SELECT * FROM reviews JOIN books ON reviews.book_id = books.id WHERE books.id = :bid", {"bid":bid}).fetchone()
+        if review_of_book is None:
+            db.execute("INSERT INTO reviews (note, book_id) VALUES (:review, :bid)", {"review":review, "bid":bid})
+            db.commit()
+        else:
+            db.execute("UPDATE reviews SET note = :review WHERE reviews.book_id = :bid", {"review":review, "bid":bid})
+            db.commit()
+
     book_w_author = db.execute("SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE books.id = :bid ", {"bid":bid}).fetchone()
     if book_w_author is None:
         return render_template("error.html", message="The book id is not correct.")
 
-    return render_template("book.html", book = book_w_author)
+    return render_template("book.html", book=book_w_author, bid=bid)
 
 if __name__ == "__main__":
     app.run(load_dotenv=True)
