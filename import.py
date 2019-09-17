@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # Create all 
     db.execute("CREATE TABLE authors (id SERIAL PRIMARY KEY, name VARCHAR NOT NULL);")
     db.execute("CREATE TABLE books (id SERIAL PRIMARY KEY, isbn VARCHAR NOT NULL, title VARCHAR NOT NULL, year INTEGER NOT NULL, author_id INTEGER REFERENCES authors );")
-    db.execute("CREATE TABLE reviews (id SERIAL PRIMARY KEY, note INTEGER DEFAULT 5, book_id INTEGER REFERENCES books); ")
+    db.execute("CREATE TABLE reviews (id SERIAL PRIMARY KEY, note SMALLINT DEFAULT 5, book_id INTEGER REFERENCES books); ")
     
     # read csv file content
     f = open("books.csv")

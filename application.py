@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template, request, url_for
+from flask import Flask, session, render_template, request, url_for, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -36,7 +36,7 @@ def search():
     return render_template("search.html", data=data)
 
 
-@app.route("/book", methods=["GET", "POST"])
+#@app.route("/book", methods=["GET", "POST"])
 @app.route("/book/<int:bid>", methods=["GET", "POST"])
 def book(bid=None):
     if bid is None and request.method != "POST": 
@@ -49,7 +49,7 @@ def book(bid=None):
             db.execute("INSERT INTO reviews (note, book_id) VALUES (:review, :bid)", {"review":review, "bid":bid})
             db.commit()
         else:
-            db.execute("UPDATE reviews SET note = :review WHERE reviews.book_id = :bid", {"review":review, "bid":bid})
+            db.execute("UPDATE reviews SET note = :review WHERE reviews.book_id = :bid;", {"review":review, "bid":bid})
             db.commit()
 
     book_w_author = db.execute("SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE books.id = :bid ", {"bid":bid}).fetchone()
@@ -57,6 +57,31 @@ def book(bid=None):
         return render_template("error.html", message="The book id is not correct.")
 
     return render_template("book.html", book=book_w_author, bid=bid)
+
+
+@app.route("/api", methods=["GET"])
+@app.route("/api/<string:isbn>", methods=["GET"])
+def api(isbn=None):
+    if isbn is None:
+        return render_template("error.html", message="Please provide an ISBN with /api route.")
+
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn ;", {"isbn":isbn}).fetchone()
+    if book is None:
+        return render_template("error.ht", message="ISBN is not valid.")
+
+    res = dict()
+    res["title"] = book.title
+    res["year"] = book.year
+    res["isbn"] = book.isbn
+    author = db.execute("SELECT * FROM authors WHERE authors.id = :author_id ;", {"author_id": book.author_id}).fetchone()
+    res["author"] = author.name
+    review_count = db.execute("SELECT COUNT(*) FROM reviews WHERE reviews.book_id = :book_id ;", {"book_id": book.id}).fetchone()
+    res["review_count"] = review_count[0]
+    avg_score = db.execute("SELECT AVG(note) FROM reviews WHERE reviews.book_id = :book_id ;", {"book_id": book.id}).fetchone()
+    res["average_score"] = str(avg_score[0]) # FIXME not str, but decimal rounded to 1
+
+    return jsonify(res)
+
 
 if __name__ == "__main__":
     app.run(load_dotenv=True)
