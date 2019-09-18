@@ -1,5 +1,6 @@
 import os
 
+import requests
 from flask import Flask, session, render_template, request, url_for, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -17,7 +18,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Set up database
-engine = create_engine(os.getenv("DATABASE_URL"))
+engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
 db = scoped_session(sessionmaker(bind=engine))
 
 
@@ -56,7 +57,13 @@ def book(bid=None):
     if book_w_author is None:
         return render_template("error.html", message="The book id is not correct.")
 
-    return render_template("book.html", book=book_w_author, bid=bid)
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", { "key": "MvlTUAcubLq9uNaWxUXYtg", "isbns":book_w_author.isbn})
+    d = res.json()
+    goodreads = dict()
+    goodreads["avg"] = d.get("books")[0].get("average_rating")
+    goodreads["total"] = d.get("books")[0].get("work_ratings_count")
+
+    return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads)
 
 
 @app.route("/api", methods=["GET"])

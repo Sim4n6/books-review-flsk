@@ -19,6 +19,10 @@
             <td>{{ book.name }}</td>
         </tr>
         <tr>
+            <th scopre="row">Goodreads rating:</th>
+            <td>Avg of {{ goodreads.avg }} for a total of {{ goodreads.total }} </td>
+        </tr>
+        <tr>
             <th scope="row">Review submission :</th>
             <td>
                 <form action="/book/{{ bid }}" method="POST">
