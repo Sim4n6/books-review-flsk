@@ -1,4 +1,5 @@
 import os
+import decimal
 
 import requests
 from flask import Flask, session, render_template, request, url_for, jsonify, redirect
@@ -95,7 +96,10 @@ def api(isbn=None):
     review_count = db.execute("SELECT COUNT(*) FROM reviews WHERE reviews.book_id = :book_id ;", {"book_id": book.id}).fetchone()
     res["review_count"] = review_count[0]
     avg_score = db.execute("SELECT AVG(note) FROM reviews WHERE reviews.book_id = :book_id ;", {"book_id": book.id}).fetchone()
-    res["average_score"] = str(avg_score[0]) # FIXME not str, but decimal rounded to 1
+    if avg_score[0] is None :
+        res["average_score"] = 0
+    else:
+        res["average_score"] = float(avg_score[0])
 
     return jsonify(res)
 
