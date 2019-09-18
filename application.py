@@ -61,13 +61,19 @@ def book(bid=None):
     if book_w_author is None:
         return render_template("error.html", message="The book id is not correct.")
 
+    # retrieve of Goodreads stats
     res = requests.get("https://www.goodreads.com/book/review_counts.json", { "key": "MvlTUAcubLq9uNaWxUXYtg", "isbns":book_w_author.isbn})
     d = res.json()
     goodreads = dict()
     goodreads["avg"] = d.get("books")[0].get("average_rating")
     goodreads["total"] = d.get("books")[0].get("work_ratings_count")
 
-    return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads)
+    # 
+    review_previous_note = db.execute("SELECT note FROM reviews WHERE reviews.book_id = :book_id;", {"book_id":bid}).fetchone()
+    if review_previous_note is None:
+        return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=5)    # default selected option is 5
+
+    return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=review_previous_note[0])
 
 
 @app.route("/api", methods=["GET"])

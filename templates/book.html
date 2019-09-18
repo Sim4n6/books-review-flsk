@@ -23,16 +23,39 @@
             <td>Avg of {{ goodreads.avg }} <br> for a total of {{ goodreads.total }} </td>
         </tr>
         <tr>
-            <th scope="row">Review submission :</th>
+            <th scope="row">Review note :</th>
             <td>
                 <form action="/book/{{ bid }}" method="POST">
                     <select name="review">
-                        <option value=""></option>
+                        {% if review_previous_note == 5 %}
+                        <option value="5" selected>5</option>
+                        {% else %}
                         <option value="5">5</option>
+                        {% endif %}
+
+                        {% if review_previous_note == 4 %}
+                        <option value="4" selected>4</option>
+                        {% else %}
                         <option value="4">4</option>
+                        {% endif %}
+
+                        {% if review_previous_note == 3 %}
+                        <option value="3" selected>3</option>
+                        {% else %}
                         <option value="3">3</option>
+                        {% endif %}
+
+                        {% if review_previous_note == 2 %}
+                        <option value="2" selected>2</option>
+                        {% else %}
                         <option value="2">2</option>
+                        {% endif %}
+
+                        {% if review_previous_note == 1 %}
+                        <option value="1" selected>1</option>
+                        {% else %}
                         <option value="1">1</option>
+                        {% endif %}
                     </select>
                     <button class="btn btn-success">save</button>
                 </form>
