@@ -31,11 +31,31 @@ def index():
 @app.route("/search", methods=["POST", "GET"])
 def search():
     data = dict()
+    books_by_isbn = None 
+    books_by_title = None 
+    books_by_author = None 
     if request.method == "POST":
+        # retrieve of submitted data to the form
         data["isbn"] = request.form['isbn']
         data["title"] = request.form['title']
         data["author"] = request.form['author']
-    return render_template("search.html", data=data)
+        
+        # searching by isbn      
+        if data["isbn"] != "":
+            tag = f"%{data['isbn']}%"
+            books_by_isbn = db.execute("""SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE books.isbn LIKE :isbn ;""", {"isbn": tag})
+
+        # search by title 
+        if data["title"] != "" :
+            tag = f"%{data['title']}%"
+            books_by_title = db.execute("""SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE books.title ILIKE :title ;""", {"title": tag})
+
+        # search by author 
+        if data["author"] != "":
+            tag = f"%{data['author']}%"
+            books_by_author = db.execute("""SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE authors.name ILIKE :author ;""", {"author": tag})
+        
+    return render_template("search.html",  books_by_isbn=books_by_isbn, books_by_title=books_by_title, books_by_author=books_by_author)
 
 
 @app.route("/book", methods=["GET"])

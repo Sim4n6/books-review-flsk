@@ -1,10 +1,38 @@
-{% extends "layout.html" %} {% block title %}Search{%endblock title%} {% block content %}
+{% extends "layout.html" %} {% block title %}Search{%endblock title%} {% block
+content %}
 <form action="/search" method="POST">
-    <input name="isbn">
-    <input name="title">
-    <input name="author">
+    <label>ISBN :</label><input name="isbn" /><br />
+    <label>Title :</label><input name="title" /><br />
+    <label>Author :</label><input name="author" /><br />
     <button>search</button>
 </form>
 
+{% if books_by_isbn %}
+<ul>
+{% for book in books_by_isbn %}
+    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} </li>
+{% endfor %}
+</ul>
 
-{{ data }} {% endblock content %}
+{% endif %}
+
+{% if books_by_title %}
+<ul>
+{% for book in books_by_title %}
+    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} </li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
+{% if books_by_author %}
+<ul>
+{% for book in books_by_author %}
+    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} </li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
+
+{% endblock content %}
