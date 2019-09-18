@@ -2,6 +2,8 @@ import os
 import decimal
 
 import requests
+import bcrypt 
+
 from flask import Flask, session, render_template, request, url_for, jsonify, redirect
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -25,8 +27,50 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    return "Project 1: TODO"
+    return render_template("index.html")
 
+
+@app.route("/register", methods=["POST", "GET"])
+def register():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(password.encode("utf-8"), salt)
+        print(hashed.decode("utf-8"))
+        user_found = db.execute("SELECT * FROM users WHERE users.email = :email", {"email":email}).fetchone()
+        if user_found is None:
+            db.execute("INSERT INTO users (email, password) VALUES (:email, :password)", {"email":email, "password": hashed.decode("utf-8")})
+            db.commit()
+            # FIXME flash messages.
+        else:
+            # FIXME flash messages.
+            pass
+        return redirect(url_for("index")) 
+
+    return render_template("register.html")
+
+
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+        password_retrieved = db.execute("SELECT password FROM users WHERE users.email = :email", {"email":email}).fetchone()
+        hashed = password_retrieved[0].encode("utf-8")
+        print(hashed)
+        if bcrypt.checkpw(password.encode("utf-8"), hashed):
+            print("It Matches!")
+        else:
+            print("It Does not Match :(")
+        return redirect(url_for("index")) 
+
+    return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    return "logout"
 
 @app.route("/search", methods=["POST", "GET"])
 def search():

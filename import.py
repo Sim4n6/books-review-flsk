@@ -6,7 +6,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-engine = create_engine("postgres://muylahjtlgacxa:17a9ecdf9048d7689884cbba513c6edee10bc31495dd16a714793d4b75a54ac1@ec2-23-21-156-171.compute-1.amazonaws.com:5432/d9u182t2pj14oq", echo=True)
+engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
 db = scoped_session(sessionmaker(bind=engine))
 
 
@@ -16,6 +16,8 @@ if __name__ == "__main__":
     db.execute("CREATE TABLE authors (id SERIAL PRIMARY KEY, name VARCHAR NOT NULL);")
     db.execute("CREATE TABLE books (id SERIAL PRIMARY KEY, isbn VARCHAR NOT NULL, title VARCHAR NOT NULL, year INTEGER NOT NULL, author_id INTEGER REFERENCES authors );")
     db.execute("CREATE TABLE reviews (id SERIAL PRIMARY KEY, note SMALLINT DEFAULT 5, book_id INTEGER REFERENCES books); ")
+    # users table for login/registration.    
+    db.execute("CREATE TABLE users (id SERIAL PRIMARY KEY, email VARCHAR NOT NULL, password VARCHAR NOT NULL); ")
     
     # read csv file content
     f = open("books.csv")
