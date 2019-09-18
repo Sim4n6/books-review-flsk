@@ -81,11 +81,11 @@ def book(bid=None):
 @app.route("/api/<string:isbn>", methods=["GET"])
 def api(isbn=None):
     if isbn is None:
-        return render_template("error.html", message="Please provide an ISBN with /api route.")
+        return render_template("error.html", message="Please provide an ISBN with /api route."), 404
 
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn ;", {"isbn":isbn}).fetchone()
     if book is None:
-        return render_template("error.ht", message="ISBN is not valid.")
+        return render_template("error.html", message="ISBN is not valid."), 404
 
     res = dict()
     res["title"] = book.title
