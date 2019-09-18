@@ -1,7 +1,7 @@
 import os
 
 import requests
-from flask import Flask, session, render_template, request, url_for, jsonify
+from flask import Flask, session, render_template, request, url_for, jsonify, redirect
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -37,7 +37,11 @@ def search():
     return render_template("search.html", data=data)
 
 
-#@app.route("/book", methods=["GET", "POST"])
+@app.route("/book", methods=["GET"])
+def no_book():
+    return redirect(url_for("index"))
+    
+
 @app.route("/book/<int:bid>", methods=["GET", "POST"])
 def book(bid=None):
     if bid is None and request.method != "POST": 
