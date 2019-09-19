@@ -4,13 +4,13 @@ content %}
     <label>ISBN :</label><input name="isbn" /><br />
     <label>Title :</label><input name="title" /><br />
     <label>Author :</label><input name="author" /><br />
-    <button>search</button>
+    <button class="btn btn-primary">search</button>
 </form>
 
 {% if books_by_isbn %}
 <ul>
 {% for book in books_by_isbn %}
-    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} </li>
+    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} <a href="{{ url_for('book', bid=book.id) }}">link</a></li>
 {% endfor %}
 </ul>
 
@@ -19,7 +19,7 @@ content %}
 {% if books_by_title %}
 <ul>
 {% for book in books_by_title %}
-    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} </li>
+    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} <a href="{{ url_for('book', bid=book.id) }}">link</a></li>
 {% endfor %}
 </ul>
 
@@ -28,7 +28,7 @@ content %}
 {% if books_by_author %}
 <ul>
 {% for book in books_by_author %}
-    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} </li>
+    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} <a href="{{ url_for('book', bid=book.id) }}">link</a></li>
 {% endfor %}
 </ul>
 
