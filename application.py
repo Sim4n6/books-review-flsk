@@ -74,8 +74,9 @@ def login():
 
 @app.route("/logout")
 def logout():
-    session.pop('email')
-    flash("You are now logged out.")
+    if session.get('email') is not None:
+        session.pop('email')
+        flash("You are now logged out.")
     return redirect(url_for("index"))
 
 @app.route("/search", methods=["POST", "GET"])
