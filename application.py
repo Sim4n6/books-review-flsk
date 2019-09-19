@@ -125,12 +125,14 @@ def book(bid=None):
 
         if request.method == "POST":
             review = request.form["review"]
+            text = request.form["text"]
             review_of_book = db.execute("SELECT * FROM reviews JOIN books ON reviews.book_id = books.id WHERE books.id = :bid", {"bid":bid}).fetchone()
             if review_of_book is None:
-                db.execute("INSERT INTO reviews (note, book_id) VALUES (:review, :bid)", {"review":review, "bid":bid})
+                db.execute("INSERT INTO reviews (note, text, book_id) VALUES (:review, :text, :bid)", {"review":review, "text":text, "bid":bid})
                 db.commit()
             else:
                 db.execute("UPDATE reviews SET note = :review WHERE reviews.book_id = :bid;", {"review":review, "bid":bid})
+                db.execute("UPDATE reviews SET text = :text WHERE reviews.book_id = :bid;", {"text":text, "bid":bid})
                 db.commit()
 
         book_w_author = db.execute("SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE books.id = :bid ", {"bid":bid}).fetchone()
@@ -145,11 +147,11 @@ def book(bid=None):
         goodreads["total"] = d.get("books")[0].get("work_ratings_count")
 
         # 
-        review_previous_note = db.execute("SELECT note FROM reviews WHERE reviews.book_id = :book_id;", {"book_id":bid}).fetchone()
+        review_previous_note = db.execute("SELECT note, text FROM reviews WHERE reviews.book_id = :book_id;", {"book_id":bid}).fetchone()
         if review_previous_note is None:
-            return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=5)    # default selected option is 5
+            return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=5, review_previsous_text=None)    # default selected option is 5
 
-        return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=review_previous_note[0])
+        return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=review_previous_note[0], review_previsous_text=review_previous_note[1])
     else:
         return redirect(url_for("index", logged_out=True))
 
