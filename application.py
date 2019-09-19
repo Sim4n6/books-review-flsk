@@ -180,6 +180,14 @@ def api(isbn=None):
 
     return jsonify(res)
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error.html', message = "Error 404 : page not found."), 404
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('error.html', message = "Eroor 500 : Server side error."), 500
+
 
 if __name__ == "__main__":
     app.run(load_dotenv=True)
