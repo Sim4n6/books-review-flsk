@@ -39,16 +39,16 @@ def register():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
-        salt = bcrypt.gensalt()
-        hashed = bcrypt.hashpw(password.encode("utf-8"), salt)
         user_found = db.execute("SELECT * FROM users WHERE users.email = :email", {"email":email}).fetchone()
         if user_found is None:
+            salt = bcrypt.gensalt()
+            hashed = bcrypt.hashpw(password.encode("utf-8"), salt)
             db.execute("INSERT INTO users (email, password) VALUES (:email, :password)", {"email":email, "password": hashed.decode("utf-8")})
             db.commit()
             flash("Registration done with success. Please login with your credentials.")
         else:
             flash(f"An account already exists for {email}. Please, log in.")
-        return redirect(url_for("index")) 
+        return redirect(url_for("login")) 
 
     return render_template("auth/register.html")
 
@@ -67,7 +67,6 @@ def login():
             return redirect(url_for("index"))
         else:
             flash("It Does not Match :(")
-        #return redirect(url_for("index")) 
 
     return render_template("auth/login.html")
 
