@@ -23,9 +23,14 @@
     </fieldset>
 </form>
 </div>
-{% if books_by_isbn %}
 
-<h1>Search results :</h1>
+{% if books_by_isbn or books_by_title or books_by_author %}
+  <h1>Search results :</h1>
+{% else %}
+  <p>No results. </p>
+{% endif %}
+
+{% if books_by_isbn %}
 
 {% for book in books_by_isbn %}
     <div class="card">
