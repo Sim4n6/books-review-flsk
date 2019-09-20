@@ -27,10 +27,6 @@
             </div>
             <div class="col-8">
                    
-                {% for message in get_flashed_messages() %}
-                    <div class="alert alert-primary">{{ message }}</div>
-                {% endfor %}
-
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         {% for message in messages %}
