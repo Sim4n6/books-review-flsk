@@ -12,12 +12,20 @@
 </head>
 
 <body>
+    
+
 
     <div class="container">
         <div class="row">
             <!--<div class="col-sm">
             </div>-->
-            <div class="col">
+            <div class="col-md-auto">
+                {% include "menu.html" %}
+    
+                {% for message in get_flashed_messages() %}
+                    <span class="alert alert-primary">{{ message }}</span>
+                {% endfor %}
+                
                 {% block content %}{% endblock content %}
             </div>
             <!--<div class="col-sm">

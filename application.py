@@ -28,10 +28,10 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 def index():
     if session.get("email") is None:
-        return render_template("index.html", logged_out=True)
+        return render_template("index.html")
     
     if session.get("email") is not None:
-        return render_template("index.html", logged_out=False)
+        return render_template("index.html")
 
 
 @app.route("/register", methods=["POST", "GET"])
@@ -50,7 +50,7 @@ def register():
             flash(f"An account is already there with the email : {email}")
         return redirect(url_for("index")) 
 
-    return render_template("register.html")
+    return render_template("auth/register.html")
 
 
 @app.route("/login", methods=["POST", "GET"])
@@ -69,7 +69,7 @@ def login():
             flash("It Does not Match :(")
         #return redirect(url_for("index")) 
 
-    return render_template("login.html")
+    return render_template("auth/login.html")
 
 
 @app.route("/logout")
@@ -153,7 +153,7 @@ def book(bid=None):
 
         return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=review_previous_note[0], review_previsous_text=review_previous_note[1])
     else:
-        return redirect(url_for("index", logged_out=True))
+        return redirect(url_for("index"))
 
 
 @app.route("/api", methods=["GET"])

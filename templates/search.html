@@ -1,36 +1,78 @@
-{% extends "layout.html" %} {% block title %}Search{%endblock title%} {% block
-content %}
+{% extends "layout.html" %} 
+
+{% block title %}Search{%endblock title%} 
+
+{% block content %}
+<div>
 <form action="/search" method="POST">
-    <label>ISBN :</label><input name="isbn" /><br />
-    <label>Title :</label><input name="title" /><br />
-    <label>Author :</label><input name="author" /><br />
+    <div class="form-group row">
+        <label class="col-sm-2">ISBN</label>
+        <div class="col-sm-10"><input name="isbn" /></div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2">Title</label>
+        <div class="col-sm-10"><input name="title" /></div>
+    </div>   
+    <div class="form-group row">
+        <label class="col-sm-2">Author</label>
+        <div class="col-sm-10"><input name="author" /></div>
+    </div>
     <button class="btn btn-primary">search</button>
 </form>
-
+</div>
 {% if books_by_isbn %}
-<ul>
+
 {% for book in books_by_isbn %}
-    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} <a href="{{ url_for('book', bid=book.id) }}">link</a></li>
+    <div class="card">
+            <div class="card-body">
+              <h5 class="card-title text-muted">{{ book.title }}</h5>
+              <p class="card-text"><ul>
+                  <li>Author : {{ book.name }}</li>
+                  <li>Year : {{ book.year }}</li>
+                  <li>ISBN : {{ book.isbn }}</li>
+              </ul></p>
+              <a href="{{ url_for('book', bid=book.id) }}" class="card-link">link</a>
+            </div>
+          </div>
 {% endfor %}
-</ul>
+
 
 {% endif %}
 
 {% if books_by_title %}
-<ul>
 {% for book in books_by_title %}
-    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} <a href="{{ url_for('book', bid=book.id) }}">link</a></li>
+<div class="card">
+        <div class="card-body">
+          <h5 class="card-title text-muted">{{ book.title }}</h5>
+          <p class="card-text"><ul>
+              <li>Author : {{ book.name }}</li>
+              <li>Year : {{ book.year }}</li>
+              <li>ISBN : {{ book.isbn }}</li>
+          </ul></p>
+          <a href="{{ url_for('book', bid=book.id) }}" class="card-link">link</a>
+        </div>
+      </div>
 {% endfor %}
-</ul>
+
 
 {% endif %}
 
 {% if books_by_author %}
-<ul>
+
 {% for book in books_by_author %}
-    <li>{{ book.isbn }} - {{ book.title }} - {{ book.year }} - {{ book.name }} <a href="{{ url_for('book', bid=book.id) }}">link</a></li>
+<div class="card">
+        <div class="card-body">
+          <h5 class="card-title text-muted">{{ book.title }}</h5>
+          <p class="card-text"><ul>
+              <li>Author : {{ book.name }}</li>
+              <li>Year : {{ book.year }}</li>
+              <li>ISBN : {{ book.isbn }}</li>
+          </ul></p>
+          <a href="{{ url_for('book', bid=book.id) }}" class="card-link">link</a>
+        </div>
+      </div>
 {% endfor %}
-</ul>
+
 
 {% endif %}
 

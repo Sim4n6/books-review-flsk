@@ -1,26 +1,9 @@
-{% extends "layout.html" %} {% block title %}Index{%endblock title%} {% block
-content %}
+{% extends "layout.html" %} 
 
+{% block title %}Index{%endblock title%} 
 
-{% for message in get_flashed_messages() %}
-<span class="alert alert-primary">{{ message }}</span>
-{% endfor %}
+{% block content %}
 
-{% if logged_out %}
-<fieldset>
-  <legend>Connexion : </legend>
-  <ul>
-    <li><a href="{{ url_for('login') }}">login</a></li>
-    <li><a href="{{ url_for('register') }}">register</a></li>
-  </ul>
-</fieldset>
-{% else %}
-<fieldset>
-  <legend>Logged in : </legend>
-  <ul>
-    <li><a href="{{ url_for('logout') }}">logout</a></li>
-    <li><a href="{{ url_for('search') }}">search</a></li>
-  </ul>
-</fieldset>
-{% endif %}
+sss
+
 {% endblock content%}
