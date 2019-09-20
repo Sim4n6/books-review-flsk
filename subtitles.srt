@@ -1,0 +1,36 @@
+1
+0:00:01,00 --> 0:00:08,00
+Website with a nice bootstrap4 support (use of components: navbar + nav + jumbotron + cards + alerts +  ).
+
+2
+0:00:08,00 --> 0:00:26,00
+User can register with username and password, a flash msg with category success or danger shows the results.
+
+3
+0:00:27,00 --> 0:00:37,00
+User can login using its credentials. He is redirected to a search webpage.
+
+4
+0:00:38,00 --> 0:00:48,00
+A multi-criteria search is available using ISBN, title and author. User can type a partial part of ISBN and the search will consider all available ISBNs with the searched term.
+
+5
+0:00:49,00 --> 0:01:05,00
+A search by partial part of the title is also available. A search by author name is also possible. 
+
+6
+0:01:06,00 --> 0:01:12,00
+A click on the link of a card for a specific book leads to a more detailed webpage with rating 0 to 5.
+
+7
+0:01:13,00 --> 0:01:18,00
+The webapp uses the Goodrads api to retrieve some data: such as avg ratings and number of rating of the current book.
+
+8
+0:01:19,00 --> 0:01:38,00
+A possibility to submit and save a comment review with a note for any book in the db. And the comment and the note persist.
+
+9
+0:01:39,00 --> 0:01:48,00
+Logout the user.
+
