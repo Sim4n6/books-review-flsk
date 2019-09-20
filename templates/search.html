@@ -33,7 +33,7 @@
 {% if books_by_isbn %}
 
 {% for book in books_by_isbn %}
-    <div class="card">
+    <div class="card" style="margin-top: 8px;">
             <div class="card-body">
               <h5 class="card-title text-muted">{{ book.title }}</h5>
               <p class="card-text"><ul>
@@ -51,7 +51,7 @@
 
 {% if books_by_title %}
 {% for book in books_by_title %}
-<div class="card">
+<div class="card" style="margin-top: 8px;">
         <div class="card-body">
           <h5 class="card-title text-muted">{{ book.title }}</h5>
           <p class="card-text"><ul>
@@ -70,7 +70,7 @@
 {% if books_by_author %}
 
 {% for book in books_by_author %}
-<div class="card">
+<div class="card" style="margin-top: 8px;">
         <div class="card-body">
           <h5 class="card-title text-muted">{{ book.title }}</h5>
           <p class="card-text"><ul>

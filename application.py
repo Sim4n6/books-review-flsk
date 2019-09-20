@@ -60,7 +60,7 @@ def login():
         password = request.form["password"]
         password_retrieved = db.execute("SELECT password FROM users WHERE users.email = :email", {"email":email}).fetchone()
         if password_retrieved is None:
-            flash(f"Email {email} not registred.", "danger")    
+            flash(f"Email {email} is not a registred user.", "danger")    
         else:
             hashed = password_retrieved[0].encode("utf-8")
             if bcrypt.checkpw(password.encode("utf-8"), hashed):
