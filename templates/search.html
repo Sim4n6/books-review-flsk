@@ -17,17 +17,19 @@
     </div>   
     <div class="form-group row">
         <label class="col-sm-2">Author</label>
-        <div class="col-sm-10"><input name="author" placeholder="eg: Fearless"/></div>
+        <div class="col-sm-10"><input name="author" placeholder="eg: Janet"/></div>
     </div>
     <button class="btn btn-primary">search</button>
     </fieldset>
 </form>
 </div>
 
-{% if books_by_isbn or books_by_title or books_by_author %}
-  <h1>Search results :</h1>
-{% else %}
-  <p>No results. </p>
+{% if books_by_isbn and books_by_title and books_by_author %}
+  {% if books_by_isbn is defined or books_by_title  is defined or books_by_author is defined %}
+    <h1>Search results :</h1>
+  {% else %}
+    <p>No results. </p>
+  {% endif %}
 {% endif %}
 
 {% if books_by_isbn %}
