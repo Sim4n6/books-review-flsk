@@ -5,22 +5,27 @@
 {% block content %}
 <div>
 <form action="/search" method="POST">
+  <fieldset>
+    <legend>Mult-criteria search : </legend>
     <div class="form-group row">
         <label class="col-sm-2">ISBN</label>
-        <div class="col-sm-10"><input name="isbn" /></div>
+        <div class="col-sm-10"><input name="isbn" placeholder="eg: 1234"/></div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2">Title</label>
-        <div class="col-sm-10"><input name="title" /></div>
+        <div class="col-sm-10"><input name="title" placeholder="eg: Strangers on a Train" /></div>
     </div>   
     <div class="form-group row">
         <label class="col-sm-2">Author</label>
-        <div class="col-sm-10"><input name="author" /></div>
+        <div class="col-sm-10"><input name="author" placeholder="eg: Fearless"/></div>
     </div>
     <button class="btn btn-primary">search</button>
+    </fieldset>
 </form>
 </div>
 {% if books_by_isbn %}
+
+<h1>Search results :</h1>
 
 {% for book in books_by_isbn %}
     <div class="card">

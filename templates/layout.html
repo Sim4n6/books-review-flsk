@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,25 +13,34 @@
 </head>
 
 <body>
-    
+    <div class="container">
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <h1>Books Search</h1>
+        <p>a simple demo web app.</p> 
+    </div>
 
+    {% include "menu.html" %}
 
     <div class="container">
         <div class="row">
-            <!--<div class="col-sm">
-            </div>-->
-            <div class="col-md-auto">
-                {% include "menu.html" %}
-    
+            <div class="col-2">
+            </div>
+            <div class="col-8">
+                   
                 {% for message in get_flashed_messages() %}
-                    <span class="alert alert-primary">{{ message }}</span>
+                    <div class="alert alert-primary">{{ message }}</div>
                 {% endfor %}
                 
                 {% block content %}{% endblock content %}
             </div>
-            <!--<div class="col-sm">
-            </div>-->
+            <div class="col-2">
+            </div>
         </div>
+    </div>
+
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <p><small>A simple demo app made by Sim4n6 :)</small></p>
+      </div>
     </div>
 
     <!-- Optional JavaScript -->

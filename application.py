@@ -47,7 +47,7 @@ def register():
             db.commit()
             flash("Registration done with success. Please login with your credentials.")
         else:
-            flash(f"An account is already there with the email : {email}")
+            flash(f"An account already exists for {email}. Please, log in.")
         return redirect(url_for("index")) 
 
     return render_template("auth/register.html")
@@ -106,6 +106,9 @@ def search():
             if data["author"] != "":
                 tag = f"%{data['author']}%"
                 books_by_author = db.execute("""SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE authors.name ILIKE :author ;""", {"author": tag})
+
+            if data["isbn"] == "" and data["title"] == "" and data["author"] == "":    
+                flash("Please, type something to be searched.")
             
         return render_template("search.html",  books_by_isbn=books_by_isbn, books_by_title=books_by_title, books_by_author=books_by_author)
     else:
@@ -124,15 +127,15 @@ def book(bid=None):
             return render_template("error.html", message="Please, provide a book id.")
 
         if request.method == "POST":
-            review = request.form["review"]
-            text = request.form["text"]
+            note = request.form["note"]
+            comment = request.form["comment"]
             review_of_book = db.execute("SELECT * FROM reviews JOIN books ON reviews.book_id = books.id WHERE books.id = :bid", {"bid":bid}).fetchone()
             if review_of_book is None:
-                db.execute("INSERT INTO reviews (note, text, book_id) VALUES (:review, :text, :bid)", {"review":review, "text":text, "bid":bid})
+                db.execute("INSERT INTO reviews (note, text, book_id) VALUES (:note, :text, :bid)", {"note":note, "text":comment, "bid":bid})
                 db.commit()
             else:
-                db.execute("UPDATE reviews SET note = :review WHERE reviews.book_id = :bid;", {"review":review, "bid":bid})
-                db.execute("UPDATE reviews SET text = :text WHERE reviews.book_id = :bid;", {"text":text, "bid":bid})
+                db.execute("UPDATE reviews SET note = :note WHERE reviews.book_id = :bid;", {"note":note, "bid":bid})
+                db.execute("UPDATE reviews SET text = :text WHERE reviews.book_id = :bid;", {"text":comment, "bid":bid})
                 db.commit()
 
         book_w_author = db.execute("SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE books.id = :bid ", {"bid":bid}).fetchone()
@@ -149,9 +152,10 @@ def book(bid=None):
         # 
         review_previous_note = db.execute("SELECT note, text FROM reviews WHERE reviews.book_id = :book_id;", {"book_id":bid}).fetchone()
         if review_previous_note is None:
-            return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=5, review_previsous_text=None)    # default selected option is 5
+            print("here")
+            return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=5, review_previous_text=None)    # default selected option is 5
 
-        return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=review_previous_note[0], review_previsous_text=review_previous_note[1])
+        return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=review_previous_note[0], review_previous_text=review_previous_note[1])
     else:
         return redirect(url_for("index"))
 
