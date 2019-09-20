@@ -64,7 +64,7 @@ def login():
             flash("Password Matches!")
             # redirect to protected after storing in session
             session["email"] = email
-            return redirect(url_for("index"))
+            return redirect(url_for("search"))
         else:
             flash("It Does not Match :(")
 
