@@ -24,13 +24,14 @@
 </form>
 </div>
 
-{% if books_by_isbn and books_by_title and books_by_author %}
-  {% if books_by_isbn is defined or books_by_title  is defined or books_by_author is defined %}
+{% if books_by_isbn or books_by_title or books_by_author %}
     <h1>Search results :</h1>
-  {% else %}
-    <p>No results. </p>
-  {% endif %}
+{% elif not books_by_isbn and not books_by_title and not books_by_author %}
+    <!-- nothing to do -->
+{% else %}
+  <p>No results. </p>
 {% endif %}
+
 
 {% if books_by_isbn %}
 
