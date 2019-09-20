@@ -45,9 +45,9 @@ def register():
             hashed = bcrypt.hashpw(password.encode("utf-8"), salt)
             db.execute("INSERT INTO users (email, password) VALUES (:email, :password)", {"email":email, "password": hashed.decode("utf-8")})
             db.commit()
-            flash("Registration done with success. Please login with your credentials.")
+            flash("Registration done with success. Please login with your credentials.", "success")
         else:
-            flash(f"An account already exists for {email}. Please, log in.")
+            flash(f"An account already exists for {email}. Please, log in.", "danger")
         return redirect(url_for("login")) 
 
     return render_template("auth/register.html")
@@ -59,14 +59,17 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
         password_retrieved = db.execute("SELECT password FROM users WHERE users.email = :email", {"email":email}).fetchone()
-        hashed = password_retrieved[0].encode("utf-8")
-        if bcrypt.checkpw(password.encode("utf-8"), hashed):
-            flash("Password Matches!")
-            # redirect to protected after storing in session
-            session["email"] = email
-            return redirect(url_for("search"))
+        if password_retrieved is None:
+            flash(f"Email {email} not registred.", "danger")    
         else:
-            flash("It Does not Match :(")
+            hashed = password_retrieved[0].encode("utf-8")
+            if bcrypt.checkpw(password.encode("utf-8"), hashed):
+                flash("Password Matches!", "success")
+                # redirect to protected after storing in session
+                session["email"] = email
+                return redirect(url_for("search"))
+            else:
+                flash("It Does not Match :(", "danger")
 
     return render_template("auth/login.html")
 
@@ -75,7 +78,7 @@ def login():
 def logout():
     if session.get('email') is not None:
         session.pop('email')
-        flash("You are now logged out.")
+        flash("You are now logged out.", "primary")
     return redirect(url_for("index"))
 
 @app.route("/search", methods=["POST", "GET"])
@@ -107,7 +110,7 @@ def search():
                 books_by_author = db.execute("""SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE authors.name ILIKE :author ;""", {"author": tag})
 
             if data["isbn"] == "" and data["title"] == "" and data["author"] == "":    
-                flash("Please, type something to be searched.")
+                flash("Please, type something to be searched.", "danger")
             
         return render_template("search.html",  books_by_isbn=books_by_isbn, books_by_title=books_by_title, books_by_author=books_by_author)
     else:
@@ -132,10 +135,12 @@ def book(bid=None):
             if review_of_book is None:
                 db.execute("INSERT INTO reviews (note, text, book_id) VALUES (:note, :text, :bid)", {"note":note, "text":comment, "bid":bid})
                 db.commit()
+                flash(f"The note {note} and the comment has been set.", "success")
             else:
                 db.execute("UPDATE reviews SET note = :note WHERE reviews.book_id = :bid;", {"note":note, "bid":bid})
                 db.execute("UPDATE reviews SET text = :text WHERE reviews.book_id = :bid;", {"text":comment, "bid":bid})
                 db.commit()
+                flash(f"The note {note} and the comment has been updated.", "success")
 
         book_w_author = db.execute("SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE books.id = :bid ", {"bid":bid}).fetchone()
         if book_w_author is None:
@@ -151,7 +156,6 @@ def book(bid=None):
         # 
         review_previous_note = db.execute("SELECT note, text FROM reviews WHERE reviews.book_id = :book_id;", {"book_id":bid}).fetchone()
         if review_previous_note is None:
-            print("here")
             return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=5, review_previous_text=None)    # default selected option is 5
 
         return render_template("book.html", book=book_w_author, bid=bid, goodreads=goodreads, review_previous_note=review_previous_note[0], review_previous_text=review_previous_note[1])

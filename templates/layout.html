@@ -22,22 +22,18 @@
     {% include "menu.html" %}
 
     <div class="container">
-        <div class="row">
-            <div class="col-2">
-            </div>
+        <div class="row justify-content-md-center">
             <div class="col-8">
                    
-                {% with messages = get_flashed_messages() %}
+                {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-primary">{{ message }}</div>
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
                 
                 {% block content %}{% endblock content %}
-            </div>
-            <div class="col-2">
             </div>
         </div>
     </div>
